@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="robots" content="noindex,nofollow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Test</title>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+       
+        
+		
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.6.2/fullcalendar.min.css">
+        </head>
+		<body>
+       
+		<!-- Navigation -->
+
+				<h1 id="clockTime"></h1>
+		<div id='external-events'>
+    <h4>Draggable Events</h4>
+    <div class='fc-event'>New Event</div>
+    <p>
+      <img src="trash-can.png" id="trash" alt="">
+    </p>
+</div>
+<div id='calendar'></div>
+		<script  src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+		<script  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="  crossorigin="anonymous"></script>
+        <script  src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src='js/moment.min.js'></script>
+		<script  src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.6.2/fullcalendar.min.js" ></script>
+		
+		<script type="text/javascript" src="js/jquery.tickingclock.js"></script><script type="text/javascript">
+		$(document).ready(function () {
+			$('#clockTime').tickingClock('November 7, 2017 17:23:04');
+		});
+		
+		$(document).ready(function() {
+
+    // page is now ready, initialize the calendar...
+
+    $('#calendar').fullCalendar({
+        // put your options and callbacks here
+    
+	
+	
+	
+	header: {
+   left: 'prev,next today',
+   center: 'title',
+   right: 'month,agendaWeek,agendaDay'
+  },
+  editable: false,
+  droppable: false,
+  	eventReceive: function(event){
+    var title = event.title;
+    var start = event.start.format("YYYY-MM-DD[T]HH:MM:SS");
+    $.ajax({
+      url: 'process.php',
+      data: 'type=new&title='+title+'&startdate='+start+'&zone='+zone,
+      type: 'POST',
+      dataType: 'json',
+      success: function(response){
+        event.id = response.eventid;
+        $('#calendar').fullCalendar('updateEvent',event);
+      },
+      error: function(e){
+        console.log(e.responseText);
+      }
+   });
+    $('#calendar').fullCalendar('updateEvent',event);
+} ,
+events: [
+				{
+					title: 'S1 shift',
+					start: '2017-11-01',
+				}]
+	
+	
+
+
+
+	})
+
+});
+
+
+		</script>   
+    
+	
+	</body>
+</html>
